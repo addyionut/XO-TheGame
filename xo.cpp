@@ -57,7 +57,7 @@ void checkCase() {
             mt[i][j] = '\0';
         }
         --i;
-        if (mt[i][j] == '\0') {
+        if (mt[i][j] == '\0') {//insert the underscore character to see the current cursor position
             mt[i][j] = '_';
         }
         printGameBoard();
