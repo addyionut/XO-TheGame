@@ -108,7 +108,6 @@ void checkCase() {
     }
 }
 
-
 int main() {
     while (noOfCharacters < 9 && gameOver == 0) {
         checkCase();
