@@ -18,9 +18,9 @@ char playerTurn() {
 }
 
 char pressKey() {
+    cout << "It's " << player << "'s turn\n";
     char key;
     cin >> key;
-    cout << "It's " << player << "'s turn\n";
     return key;
 }
 
@@ -37,14 +37,26 @@ void printGameBoard() {
 
 void checkCase() {
     nextComand = pressKey();
-    if (nextComand == 'q') {//insert into the game board the character X or O when pressed q key
+    if (nextComand == 'q') {//insert into the game board the character X or O when the q key is pressed
         if (mt[i][j] == '_' || mt[i][j] == '\0') {
             mt[i][j] = player;
             playerTurn();
             ++noOfCharacters;
-            printGameBoard();
-            if (noOfCharacters == 9 && gameOver == 0) {
+            if ((mt[0][0] != '\0' && (mt[0][0] == mt[1][0] && mt[1][0] == mt[2][0])) ||
+            (mt[1][0] != '\0' && (mt[1][0] == mt[1][1] && mt[1][1] == mt[1][2])) ||
+            (mt[2][0] != '\0' && (mt[2][0] == mt[2][1] && mt[2][1] == mt[2][2])) ||
+            (mt[0][0] != '\0' && (mt[0][0] == mt[0][1] && mt[0][1] == mt[0][2])) ||
+            (mt[0][1] != '\0' && (mt[0][1] == mt[1][1] && mt[0][1] == mt[2][1])) ||
+            (mt[0][2] != '\0' && (mt[0][2] == mt[1][2] && mt[1][2] == mt[2][2])) ||
+            (mt[0][0] != '\0' && (mt[0][0] == mt[1][1] && mt[1][1] == mt[2][2])) ||
+            (mt[0][2] != '\0' && (mt[0][2] == mt[1][1] && mt[1][1] == mt[2][0]))) {
+                printGameBoard();
+                cout << "The player " << playerTurn() << " won!" << "\n";
                 gameOver = 1;
+            }
+            else if (noOfCharacters == 9 && gameOver == 0) {
+                gameOver = 1;
+                printGameBoard();
                 cout << "Draw!\n";
             }
         }
@@ -53,14 +65,13 @@ void checkCase() {
         }
     }
     else if (nextComand == 'w' && i > 0) {
-        if (mt[i][j] == '_') {
+        if (mt[i][j] == '_') {//delete the previous cursor position indicator
             mt[i][j] = '\0';
         }
         --i;
         if (mt[i][j] == '\0') {//insert the underscore character to see the current cursor position
             mt[i][j] = '_';
         }
-        printGameBoard();
     }
     else if (nextComand == 'a' && j > 0) {
         if (mt[i][j] == '_') {
@@ -70,7 +81,6 @@ void checkCase() {
         if (mt[i][j] == '\0') {
             mt[i][j] = '_';
         }
-        printGameBoard();
     }
     else if (nextComand == 's' && i < 2) {
         if (mt[i][j] == '_') {
@@ -80,7 +90,6 @@ void checkCase() {
         if (mt[i][j] == '\0') {
             mt[i][j] = '_';
         }
-        printGameBoard();
     }
     else if (nextComand == 'd' && j < 2) {
         if (mt[i][j] == '_') {
@@ -90,21 +99,12 @@ void checkCase() {
         if (mt[i][j] == '\0') {
             mt[i][j] = '_';
         }
-        printGameBoard();
     }
     else {
-        cout << "Out of the table!\n";
+        cout << "Out of game board!\n";
     }
-    if ((mt[0][0] != '\0' && (mt[0][0] == mt[1][0] && mt[1][0] == mt[2][0])) ||
-    (mt[1][0] != '\0' && (mt[1][0] == mt[1][1] && mt[1][1] == mt[1][2])) ||
-    (mt[2][0] != '\0' && (mt[2][0] == mt[2][1] && mt[2][1] == mt[2][2])) ||
-    (mt[0][0] != '\0' && (mt[0][0] == mt[0][1] && mt[0][1] == mt[0][2])) ||
-    (mt[0][1] != '\0' && (mt[0][1] == mt[1][1] && mt[0][1] == mt[2][1])) ||
-    (mt[0][2] != '\0' && (mt[0][2] == mt[1][2] && mt[1][2] == mt[2][2])) ||
-    (mt[0][0] != '\0' && (mt[0][0] == mt[1][1] && mt[1][1] == mt[2][2])) ||
-    (mt[0][2] != '\0' && (mt[0][2] == mt[1][1] && mt[1][1] == mt[2][0]))) {
-        cout << playerTurn() << " won!" << "\n";
-        gameOver = 1;
+    if (gameOver == 0) {
+        printGameBoard();
     }
 }
 
