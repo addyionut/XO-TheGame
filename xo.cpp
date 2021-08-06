@@ -3,10 +3,7 @@ using namespace std;
 
 char mt[4][4];
 char player = 'X';
-char nextComand;
-int noOfCharacters;
-int gameOver = 0;
-int i = 1, j = 1;
+int gameOver, noOfCharacters, i, j;
 
 char playerTurn() {
     if (player == 'X') {
@@ -19,9 +16,9 @@ char playerTurn() {
 
 char pressKey() {
     cout << "It's " << player << "'s turn\n";
-    char key;
-    cin >> key;
-    return key;
+    char keyValue;
+    cin >> keyValue;
+    return keyValue;
 }
 
 void printGameBoard() {
@@ -36,28 +33,34 @@ void printGameBoard() {
 }
 
 void checkCase() {
-    nextComand = pressKey();
-    if (nextComand == 'q') {//insert into the game board the character X or O when the q key is pressed
-        if (mt[i][j] == '_' || mt[i][j] == '\0') {
+    char nextComand = pressKey();
+    if (nextComand == 'q') {//insert into the game board the character X or O when the 'q' key is pressed
+        if (mt[i][j] == '\0' || mt[i][j] == '_') {
             mt[i][j] = player;
             playerTurn();
             ++noOfCharacters;
-            if ((mt[0][0] != '\0' && (mt[0][0] == mt[1][0] && mt[1][0] == mt[2][0])) ||
-            (mt[1][0] != '\0' && (mt[1][0] == mt[1][1] && mt[1][1] == mt[1][2])) ||
-            (mt[2][0] != '\0' && (mt[2][0] == mt[2][1] && mt[2][1] == mt[2][2])) ||
-            (mt[0][0] != '\0' && (mt[0][0] == mt[0][1] && mt[0][1] == mt[0][2])) ||
-            (mt[0][1] != '\0' && (mt[0][1] == mt[1][1] && mt[0][1] == mt[2][1])) ||
-            (mt[0][2] != '\0' && (mt[0][2] == mt[1][2] && mt[1][2] == mt[2][2])) ||
-            (mt[0][0] != '\0' && (mt[0][0] == mt[1][1] && mt[1][1] == mt[2][2])) ||
-            (mt[0][2] != '\0' && (mt[0][2] == mt[1][1] && mt[1][1] == mt[2][0]))) {
+            if ((mt[0][0] != '\0' && mt[0][0] == mt[1][1] && mt[1][1] == mt[2][2]) ||
+                     (mt[0][2] != '\0' && mt[0][2] == mt[1][1] && mt[1][1] == mt[2][0])) {//check each diagonal if it have 3 identical not-null characters 
                 printGameBoard();
                 cout << "The player " << playerTurn() << " won!" << "\n";
                 gameOver = 1;
             }
-            else if (noOfCharacters == 9 && gameOver == 0) {
-                gameOver = 1;
-                printGameBoard();
-                cout << "Draw!\n";
+            else {
+                for (int i = 0, j = 0; i < 3 && gameOver == 0; ++i) {//iterate through matrix to check if a line or a column have 3 identical not-null characters
+                    if (mt[i][i] != '\0') {//move over only if at least one element from current line or column is not null
+                        if ((mt[i][j] == mt[i][j + 1] && mt[i][j + 1] == mt[i][j + 2]) ||
+                            (mt[j][i] == mt[j + 1][i] && mt[j + 1][i] == mt[j + 2][i])) {
+                            printGameBoard();
+                            cout << "The player " << playerTurn() << " won!" << "\n";
+                            gameOver = 1;
+                        }
+                    }
+                }
+                if (noOfCharacters == 9 && gameOver == 0) {
+                    printGameBoard();
+                    cout << "Draw game!\n";
+                    gameOver = 1;
+                }
             }
         }
         else {
@@ -101,7 +104,7 @@ void checkCase() {
         }
     }
     else {
-        cout << "Out of game board!\n";
+        cout << "Outside the game board!\n";
     }
     if (gameOver == 0) {
         printGameBoard();
